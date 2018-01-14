@@ -244,6 +244,7 @@ public class AddProduct extends javax.swing.JFrame {
             if(rdnClothing.isSelected())
             {//Github Test Comment
                 //Github Test Comment2
+                //Github Test Comment for Test Branch
                 try
                 {
                     String measurement = txtAdditional.getText();
