@@ -242,7 +242,7 @@ public class AddProduct extends javax.swing.JFrame {
             {lblMessage.setText("Stock in wrong format");}
             
             if(rdnClothing.isSelected())
-            {
+            {//Github Test Comment
                 try
                 {
                     String measurement = txtAdditional.getText();
