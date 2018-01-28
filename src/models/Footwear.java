@@ -35,4 +35,11 @@ public class Footwear extends Product
         super(productIdIn, productNameIn, priceIn, stockLevelIn);
         this.size = sizeIn;
     }
+    
+    public Footwear(String productNameIn, double priceIn,
+            int stockLevelIn, int sizeIn)
+    {//Calling Overloaded in Product Class - passing params to it
+        super(productNameIn, priceIn, stockLevelIn);
+        this.size = sizeIn;
+    }
 }

@@ -17,7 +17,68 @@ import java.util.HashMap;
  * @author 30214590
  */
 public class DBManager
-{  
+{
+    //This is the address of the Database, change this here to update all connections in DBManager
+    private final String databaseLink = "jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Hub\\HND - Java\\ShopDB.accdb";
+    
+    public void addOrderLine(OrderLine oLine, int orderId)
+    {
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(databaseLink);
+            Statement stmt = conn.createStatement();
+            
+            stmt.executeUpdate("INSERT INTO OrderLines (OrderLineId, ProductId, Quantity, " +
+                    "LineTotal, OrderId) VALUES ('" + oLine.getOrderLineId() + "','" + oLine.getProduct().getProductId() +
+                     "','" + oLine.getQuantity() + "','" + oLine.getLineTotal()+ "','" + orderId + "')");
+            conn.close();
+            updateOrderTotal(orderId, oLine.getLineTotal());
+        }
+        catch(Exception ex)
+        {String message = ex.getMessage();}
+    }
+    
+    public void updateOrderTotal(int orderId, double lineTotal)
+    {
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(databaseLink);
+            Statement stmt = conn.createStatement();
+            
+            stmt.executeUpdate("UPDATE Orders SET OrderTotal= OrderTotal + " +
+                              lineTotal + " WHERE OrderId= '" + orderId + "'");
+            conn.close();
+        }
+        catch(Exception ex)
+        {String message = ex.getMessage();}
+    }
+    
+    public int addOrder(String personId, Order o)
+    {
+        int orderId = 0;     
+        try
+        {
+            Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
+            Connection conn = DriverManager.getConnection(databaseLink);
+            Statement stmt = conn.createStatement();
+            
+            stmt.executeUpdate("INSERT INTO Orders (OrderDate, Customer, OrderTotal, " +
+                    "Status) VALUES ('" + new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(o.getOrderDate()) +
+                    "','" + personId + "','" + o.getOrderTotal() + "','" + o.getStatus() + "')");
+            
+            ResultSet rs = stmt.getGeneratedKeys();
+            
+            if(rs.next())
+            {orderId = rs.getInt(1);}           
+            conn.close();
+        }
+        catch(Exception ex)
+        {String message = ex.getMessage();}  
+        return orderId;
+    }
+    
     public HashMap<Integer, Product> loadProducts()
     {
         HashMap<Integer, Product> products = new HashMap();
@@ -25,7 +86,7 @@ public class DBManager
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Java\\JHAssess\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(databaseLink);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Products");
             
@@ -80,7 +141,7 @@ public class DBManager
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Java\\JHAssess\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(databaseLink);
             Statement stmt = conn.createStatement();
             
             stmt.executeUpdate("INSERT INTO Products (ProductName, Price, StockLevel, Measurement, Size) " +
@@ -112,7 +173,7 @@ public class DBManager
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Java\\JHAssess\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(databaseLink);
             Statement stmt = conn.createStatement();
             
             stmt.executeUpdate("UPDATE Products SET ProductName= '" + updateProduct.getProductName() + "', "
@@ -131,7 +192,7 @@ public class DBManager
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Java\\JHAssess\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(databaseLink);
             Statement stmt = conn.createStatement();
             
             stmt.executeUpdate("DELETE FROM Products WHERE ProductId = '" + 
@@ -151,7 +212,7 @@ public class DBManager
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             Connection conn = 
-                    DriverManager.getConnection("jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Java\\JHAssess\\ShopDB.accdb");
+                    DriverManager.getConnection(databaseLink);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Customers");
             
@@ -197,7 +258,7 @@ public class DBManager
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Java\\JHAssess\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(databaseLink);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Customers WHERE Username = '" + userNameIn  + "' AND Password = '" + passwordIn + "'");
             
@@ -235,7 +296,7 @@ public class DBManager
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Java\\JHAssess\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(databaseLink);
             Statement stmt = conn.createStatement();
             
             ResultSet rs = stmt.executeQuery("SELECT * FROM Customers WHERE Username = '" + newCustomer.getUserName() + "'");
@@ -268,7 +329,7 @@ public class DBManager
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Java\\JHAssess\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(databaseLink);
             Statement stmt = conn.createStatement();
             stmt.executeUpdate("UPDATE Customers SET Password= '" + customer.getPassword() + "', "
                     + "FirstName= '" + customer.getFirstName() + "', "
@@ -291,7 +352,7 @@ public class DBManager
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Java\\JHAssess\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(databaseLink);
             Statement stmt = conn.createStatement();
             
             stmt.executeUpdate("DELETE FROM Customers WHERE Username = '" + 
@@ -311,7 +372,7 @@ public class DBManager
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
             Connection conn = 
-                    DriverManager.getConnection("jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Java\\JHAssess\\ShopDB.accdb");
+                    DriverManager.getConnection(databaseLink);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Staff");
             
@@ -355,7 +416,7 @@ public class DBManager
         try
         {
             Class.forName("net.ucanaccess.jdbc.UcanaccessDriver");
-            Connection conn = DriverManager.getConnection("jdbc:ucanaccess://D:\\SegaChief\\Documents\\HND - Java\\JHAssess\\ShopDB.accdb");
+            Connection conn = DriverManager.getConnection(databaseLink);
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Staff WHERE Username = '" + userNameIn  + "' AND Password = '" + passwordIn + "'");
             

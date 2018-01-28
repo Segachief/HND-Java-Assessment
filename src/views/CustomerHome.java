@@ -139,11 +139,13 @@ public class CustomerHome extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUnregisterActionPerformed
 
     private void btnBrowseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBrowseActionPerformed
-        // TODO add your handling code here:
+        ViewProduct viewProduct = new ViewProduct(loggedInCustomer);
+        this.dispose();
+        viewProduct.setVisible(true);
     }//GEN-LAST:event_btnBrowseActionPerformed
 
     private void btnViewOrdersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewOrdersActionPerformed
-        // TODO add your handling code here:
+        //Add event code here
     }//GEN-LAST:event_btnViewOrdersActionPerformed
 
     /**

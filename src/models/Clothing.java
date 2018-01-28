@@ -29,9 +29,16 @@ public class Clothing extends Product
     }
     
     //Overloaded
-    public Clothing(int productIdIn, String productNameIn, double priceIn,
+    public Clothing(String productNameIn, double priceIn,
             int stockLevelIn, String measurementIn)
     {//Calling Overloaded in Product Class - passing params to it
+        super(productNameIn, priceIn, stockLevelIn);
+        this.measurement = measurementIn;
+    }
+    
+    public Clothing(int productIdIn, String productNameIn, double priceIn,
+            int stockLevelIn, String measurementIn)
+    {
         super(productIdIn, productNameIn, priceIn, stockLevelIn);
         this.measurement = measurementIn;
     }

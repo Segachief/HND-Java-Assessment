@@ -12,6 +12,7 @@ package models;
 public class OrderLine 
 {
     private int orderLineId;
+    private Product product;
     private int quantity;
     private double lineTotal;
     
@@ -24,6 +25,9 @@ public class OrderLine
 
 	public double getLineTotal()
 	{return lineTotal;}
+        
+        public Product getProduct()
+        {return product;}
 
     //Setter methods
 	public void setOrderLineId(int orderLineIdIn)
@@ -34,21 +38,16 @@ public class OrderLine
 
 	public void setlineTotal(double lineTotalIn)
 	{lineTotal = lineTotalIn;}
+        
+        public void setProduct (Product productIn)
+        {product = productIn;}
 
     //Constructor - Default values
-	public OrderLine()
+	public OrderLine(Order o, Product productIn)
 	{
-		orderLineId = 0;
-		quantity = 0;
-		lineTotal = 0.0;
-	}
-        
-    //Overloaded Constructor
-	public OrderLine(int orderLineIdIn, int quantityIn, double lineTotalIn)
-	{
-		orderLineId = orderLineIdIn;
-		quantity = quantityIn;
-		lineTotal = lineTotalIn;
-	}   
-        
+		orderLineId = o.generateUniqueOrderLineId();
+                product = productIn;
+		quantity = 1;
+		lineTotal = product.getPrice() * quantity;
+	}     
 }
