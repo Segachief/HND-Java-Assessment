@@ -5,6 +5,8 @@
  */
 package models;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -16,6 +18,26 @@ public class Order
     private Date orderDate;
     private double orderTotal;
     private String status;
+    private HashMap<Integer, OrderLine> orderLines;
+    
+    public void addOrderLine(OrderLine oLine)
+    {
+        orderTotal = orderTotal + oLine.getLineTotal();
+        orderLines.put(oLine.getOrderLineId(), oLine);
+        DBManager db = new DBManager();
+        db.addOrderLine(oLine, orderId);
+    }
+    
+    public int generateUniqueOrderLineId()
+    {
+        int orderLineId = 0;
+        for(Map.Entry<Integer, OrderLine> orderLineEntry : orderLines.entrySet())
+        {
+            if(orderLines.containsKey(orderLineId))
+            {orderLineId++;}
+        }
+        return orderLineId;
+    }
     
     //Getter methods
 	public int getOrderId()
@@ -29,6 +51,9 @@ public class Order
 
 	public String getStatus()
 	{return status;}
+        
+        public HashMap<Integer, OrderLine> getOrderLines()
+        {return orderLines;}
 
     //Setter methods
 	public void setOrderId(int orderIdIn)
@@ -42,23 +67,28 @@ public class Order
 
 	public void setStatus(String statusIn)
 	{status = statusIn;}
+        
+        public void setOrderLines(HashMap<Integer, OrderLine> oLines)
+        {orderLines = oLines;}
 
     //Constructor - Default values
 	public Order()
 	{
 		orderId = 0;
 		orderDate = new Date();
-		orderTotal = 0.0;
-		status = "";
+		orderTotal = 0;
+		status = "New";
+                orderLines = new HashMap<>();
 	}
         
     //Overloaded Constructor
-	public Order(int orderIdIn, Date orderDateIn, double orderTotalIn, String statusIn)
+	public Order(int oId, Date oDate, double oTotal, String oStatus)
 	{
-		orderId = orderIdIn;
-		orderDate = orderDateIn;
-		orderTotal = orderTotalIn;
-		status = statusIn;
+		orderId = oId;
+		orderDate = oDate;
+		orderTotal = oTotal;
+		status = oStatus;
+                orderLines = new HashMap<>();
 	}   
         
 }

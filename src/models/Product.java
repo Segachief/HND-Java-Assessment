@@ -9,6 +9,7 @@ package models;
  *
  * @author 30214590
  */
+
 public class Product
 {
     private int productId;
@@ -55,12 +56,19 @@ public class Product
 		stockLevel = 0;
 	}
         
-    //Overloaded Constructor      
+    //Overloaded Constructors       
+        public Product(String productNameIn, double priceIn, int stockLevelIn)
+	{
+		productName = productNameIn;
+		price = priceIn;
+		stockLevel = stockLevelIn;
+        }      
+        
 	public Product(int productIdIn, String productNameIn, double priceIn, int stockLevelIn)
 	{
-		this.productId = productIdIn;
-		this.productName = productNameIn;
-		this.price = priceIn;
-		this.stockLevel = stockLevelIn;
+		productId = productIdIn;
+		productName = productNameIn;
+		price = priceIn;
+		stockLevel = stockLevelIn;
         }      
 }
